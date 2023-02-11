@@ -1,0 +1,19 @@
+{
+  "name": "acarsdec",
+  "installers": [
+    {
+      "type": "manual",
+      "commands": [
+        "mkdir -p /tmp/airframes-installer/src",
+        "mkdir -p /tmp/airframes-installer/logs",
+        "rm -rf /tmp/airframes-installer/src/acarsdec",
+        "git clone https://github.com/TLeconte/acarsdec.git /tmp/airframes-installer/src/acarsdec",
+        "cd /tmp/airframes-installer/src/acarsdec",
+        "mkdir build",
+        "cd build",
+        "cmake ..",
+        "make install"
+      ]
+    }
+  ]
+}
