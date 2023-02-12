@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Airframes Installer - Decoder installer - dumphfdl by szpajder (HFDL)
-# https://github.com/airframesio/scripts/installer/decoders/compile/install/dumphfdl.sh
+# https://github.com/airframesio/installer/decoders/compile/install/dumphfdl.sh
 #
 
 STEPS=4

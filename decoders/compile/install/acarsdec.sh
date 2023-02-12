@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Airframes Installer - Decoder installer - acarsdec by TLeconte (ACARS)
-# https://github.com/airframesio/scripts/installer/decoders/compile/install/acarsdec.sh
+# https://github.com/airframesio/installer/decoders/compile/install/acarsdec.sh
 #
 
 STEPS=4
