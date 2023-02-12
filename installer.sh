@@ -51,7 +51,7 @@ title="Airframes Installer ${version}"
 
 function checkoutInstaller() {
   rm -rf ${AIRFRAMES_INSTALLER_PATH}
-  git clone https://github.com/airframesio/scripts.git ${AIRFRAMES_INSTALLER_PATH}
+  git clone https://github.com/airframesio/installer.git ${AIRFRAMES_INSTALLER_PATH}
 }
 
 function ensureRoot() {
