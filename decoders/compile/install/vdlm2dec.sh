@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Airframes Installer - Decoder installer - vdlm2dec by TLeconte (VDL)
-# https://github.com/airframesio/installer/decoders/compile/install/vdlm2dec.sh
+# https://github.com/airframesio/scripts/installer/decoders/compile/install/vdlm2dec.sh
 #
 
 STEPS=4

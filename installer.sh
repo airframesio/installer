@@ -51,7 +51,7 @@ title="Airframes Installer ${version}"
 
 function checkoutInstaller() {
   rm -rf ${AIRFRAMES_INSTALLER_PATH}
-  git clone https://github.com/airframesio/installer.git ${AIRFRAMES_INSTALLER_PATH}
+  git clone https://github.com/airframesio/scripts.git ${AIRFRAMES_INSTALLER_PATH}
 }
 
 function ensureRoot() {
@@ -135,8 +135,8 @@ function showMenuInstallDockerApps() {
   --ok-label "Install" \
   --cancel-label "Back" \
   --checklist "Select Docker apps to install:" 15 50 8 \
-  1 "acarsdec" "on" \
-  2 "acarshub" "on" \
+  1 "ACARS: acarsdec" "on" \
+  2 "ACARS: acarshub" "on" \
   3 "dumphfdl" "off" \
   4 "dumpvdl2" "on" \
   5 "vdlm2dec" "off" 2>&1 1>&3)
@@ -148,10 +148,11 @@ function showMenuInstallDecoders() {
   --ok-label "Install" \
   --cancel-label "Back" \
   --checklist "Select decoders to install:" 15 50 8 \
-  1 "acarsdec" "on" \
-  2 "dumphfdl" "off" \
-  3 "dumpvdl2" "on" \
-  4 "vdlm2dec" "off" 2>&1 1>&3)
+  1 "ACARS: acarsdec" "on" \
+  2 "ADSB: readsb" "off" \
+  3 "HFDL: dumphfdl" "off" \
+  4 "VDL: dumpvdl2" "on" \
+  5 "VDL: vdlm2dec" "off" 2>&1 1>&3)
   echo "$result"
 }
 
@@ -205,7 +206,7 @@ do
       fi
       sleep 1
       ;;
-      2)
+      3)
       echo "Installing dumphfdl"
       $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/dumphfdl.sh
       if [ $? -ne 0 ]; then
@@ -213,7 +214,7 @@ do
       fi
       sleep 1
       ;;
-      3)
+      4)
       echo "Installing dumpvdl2"
       $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/dumpvdl2.sh
       if [ $? -ne 0 ]; then
@@ -221,7 +222,7 @@ do
       fi
       sleep 1
       ;;
-      4)
+      5)
       echo "Installing vdlm2dec"
       $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/vdlm2dec.sh
       if [ $? -ne 0 ]; then
