@@ -185,71 +185,72 @@ while [ $? -ne 1 ]
 do
   result=$(showMenuMain)
   case $result in
-  1)
-  result=$(showMenuInstall)
+    1)
+      result=$(showMenuInstall)
 
-  if [ "$result" = "1" ]; then
-    selections=$(showMenuInstallDecoders)
-    echo "Installing decoders: $selections"
+      if [ "$result" = "1" ]; then
+        selections=$(showMenuInstallDecoders)
+        echo "Installing decoders: $selections"
 
-    if [ "$selections" == "" ]; then
-      continue
-    fi
+        if [ "$selections" == "" ]; then
+          continue
+        fi
 
-    for selection in $selections
-    do
-      case $selection in
-      1)
-      $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/acarsdec.sh
-      if [ $? -ne 0 ]; then
-        dialog --title "Error" --msgbox "acarsdec failed to install" 6 50
+        for selection in $selections
+        do
+          case $selection in
+          1)
+            $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/acarsdec.sh
+            if [ $? -ne 0 ]; then
+              dialog --title "Error" --msgbox "acarsdec failed to install" 6 50
+            fi
+            sleep 1
+            ;;
+          3)
+            echo "Installing dumphfdl"
+            $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/dumphfdl.sh
+            if [ $? -ne 0 ]; then
+              dialog --title "Error" --msgbox "dumphfdl failed to install" 6 50
+            fi
+            sleep 1
+            ;;
+          4)
+            echo "Installing dumpvdl2"
+            $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/dumpvdl2.sh
+            if [ $? -ne 0 ]; then
+              dialog --title "Error" --msgbox "dumpvdl2 failed to install" 6 50
+            fi
+            sleep 1
+            ;;
+          5)
+            echo "Installing vdlm2dec"
+            $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/vdlm2dec.sh
+            if [ $? -ne 0 ]; then
+              dialog --title "Error" --msgbox "vdlm2dec failed to install" 6 50
+            fi
+            sleep 1
+            ;;
+          esac
+        done
+
+        dialog --title "Success" --msgbox "Decoders installed" 6 50
       fi
-      sleep 1
-      ;;
-      3)
-      echo "Installing dumphfdl"
-      $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/dumphfdl.sh
-      if [ $? -ne 0 ]; then
-        dialog --title "Error" --msgbox "dumphfdl failed to install" 6 50
+
+      if [ "$result" = "2" ]; then
+        selections=$(showMenuInstallDockerApps)
       fi
-      sleep 1
-      ;;
-      4)
-      echo "Installing dumpvdl2"
-      $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/dumpvdl2.sh
-      if [ $? -ne 0 ]; then
-        dialog --title "Error" --msgbox "dumpvdl2 failed to install" 6 50
+
+      if [ "$result" = "3" ]; then
+        echo "Installing with packages"
       fi
-      sleep 1
       ;;
-      5)
-      echo "Installing vdlm2dec"
-      $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/vdlm2dec.sh
-      if [ $? -ne 0 ]; then
-        dialog --title "Error" --msgbox "vdlm2dec failed to install" 6 50
-      fi
-      sleep 1
+
+    2)
+      source $AIRFRAMES_INSTALLER_PATH/utils/detect-sdrs.sh
+      sdrs=$(detectSDRs)
+      dialog --title "Detected SDRs" --msgbox "$sdrs" 10 50
+      sleep 5
       ;;
-      esac
-    done
-
-    dialog --title "Success" --msgbox "Decoders installed" 6 50
-  fi
-
-  if [ "$result" = "2" ]; then
-    selections=$(showMenuInstallDockerApps)
-  fi
-
-  if [ "$result" = "3" ]; then
-    echo "Installing with packages"
-  fi
-  ;;
-
-  2)
-  source $AIRFRAMES_INSTALLER_PATH/utils/detect-sdrs.sh
-  sdrs=$(detectSDRs)
-  dialog --title "Detected SDRs" --msgbox "$sdrs" 10 50
-  sleep 5
 
   esac
 done
