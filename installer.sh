@@ -44,15 +44,12 @@ AIRFRAMES_CONFIG_FILE="${AIRFRAMES_CONFIG_PATH}/config.json"
 AIRFRAMES_FEEDS_FILE="${AIRFRAMES_CONFIG_PATH}/feeds.json"
 AIRFRAMES_SDRS_FILE="${AIRFRAMES_CONFIG_PATH}/sdrs.json"
 
-exec 3>&1
-
 version="0.1.0"
 title="Airframes Installer ${version}"
 
 ### Functions: System
 
 function checkoutInstaller() {
-  rm -rf ${AIRFRAMES_INSTALLER_PATH}
   git clone "${AIRFRAMES_INSTALLER_GIT_REPO}" "${AIRFRAMES_INSTALLER_PATH}"
 }
 
@@ -70,7 +67,13 @@ function initializePaths() {
   mkdir -p "${AIRFRAMES_SRC_PATH}"
   mkdir -p "${AIRFRAMES_TMP_PATH}"
 
-  rm -rf "${AIRFRAMES_INSTALLER_TMP_PATH}/logs/*"
+  rm -rf "${AIRFRAMES_INSTALLER_TMP_PATH}"
+  mkdir -p "${AIRFRAMES_INSTALLER_TMP_PATH}/logs"
+
+  # descriptor 3 is used to capture the result from dialog whilst stdout
+  # is used to display the dialog UI
+  exec 3>&1
+  exec 4>"${AIRFRAMES_INSTALLER_TMP_PATH}/logs/install.log"
 }
 
 function platform() {
@@ -192,7 +195,7 @@ do
 
       if [ "$result" = "1" ]; then
         selections=$(showMenuInstallDecoders)
-        echo "Installing decoders: $selections"
+        echo "Installing decoders from source: $selections" >&4
 
         if [ "$selections" == "" ]; then
           continue
@@ -202,6 +205,7 @@ do
         do
           case $selection in
           1)
+            echo "Installing acarsdec" >&4
             $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/acarsdec.sh
             if [ $? -ne 0 ]; then
               dialog --title "Error" --msgbox "acarsdec failed to install" 6 50
@@ -209,7 +213,11 @@ do
             sleep 1
             ;;
           3)
-            echo "Installing dumphfdl"
+            echo "Installing readsb" >&4
+            # TODO
+            ;;
+          3)
+            echo "Installing dumphfdl" >&4
             $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/dumphfdl.sh
             if [ $? -ne 0 ]; then
               dialog --title "Error" --msgbox "dumphfdl failed to install" 6 50
@@ -217,7 +225,7 @@ do
             sleep 1
             ;;
           4)
-            echo "Installing dumpvdl2"
+            echo "Installing dumpvdl2" >&4
             $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/dumpvdl2.sh
             if [ $? -ne 0 ]; then
               dialog --title "Error" --msgbox "dumpvdl2 failed to install" 6 50
@@ -225,7 +233,7 @@ do
             sleep 1
             ;;
           5)
-            echo "Installing vdlm2dec"
+            echo "Installing vdlm2dec" >&4
             $AIRFRAMES_INSTALLER_PATH/decoders/compile/install/vdlm2dec.sh
             if [ $? -ne 0 ]; then
               dialog --title "Error" --msgbox "vdlm2dec failed to install" 6 50
@@ -240,16 +248,20 @@ do
 
       if [ "$result" = "2" ]; then
         selections=$(showMenuInstallDockerApps)
+        echo "Installing decoders with docker: $selections" >&4
+        # TODO
       fi
 
       if [ "$result" = "3" ]; then
-        echo "Installing with packages"
+        echo "Installing decoders as packages" >&4
+        # TODO
       fi
       ;;
 
     2)
       source $AIRFRAMES_INSTALLER_PATH/utils/detect-sdrs.sh
       sdrs=$(detectSDRs)
+      echo "Detected SDRs: ${sdrs}" >&4
       dialog --title "Detected SDRs" --msgbox "$sdrs" 10 50
       sleep 5
       ;;

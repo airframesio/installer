@@ -5,7 +5,9 @@
 
 STEP=$((100/$STEPS))
 current_step=0
-LOG_FILE="/tmp/airframes-installer/logs/install.log"
+LOG_DIR="/tmp/airframes-installer/logs"
+LOG_FILE="${LOG_DIR}/install.log"
+mkdir -p "${LOG_DIR}"
 
 printStep() {
   (
