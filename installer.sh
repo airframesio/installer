@@ -28,6 +28,8 @@
 
 ### Variables
 
+: ${AIRFRAMES_INSTALLER_GIT_REPO:="https://github.com/airframesio/installer.git"}
+
 AIRFRAMES_INSTALLER_TMP_PATH="/tmp/airframes-installer"
 AIRFRAMES_INSTALLER_PATH="${AIRFRAMES_INSTALLER_TMP_PATH}/installer"
 
@@ -51,7 +53,7 @@ title="Airframes Installer ${version}"
 
 function checkoutInstaller() {
   rm -rf ${AIRFRAMES_INSTALLER_PATH}
-  git clone https://github.com/airframesio/installer.git ${AIRFRAMES_INSTALLER_PATH}
+  git clone "${AIRFRAMES_INSTALLER_GIT_REPO}" "${AIRFRAMES_INSTALLER_PATH}"
 }
 
 function ensureRoot() {
