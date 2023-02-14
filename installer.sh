@@ -23,8 +23,8 @@
 #   $ sudo ./installer.sh
 #
 
-# Exit on error
-# set -e
+# Exit if anything goes wrong
+set -euo pipefail
 
 ### Variables
 
@@ -112,31 +112,42 @@ function showPlatformNotSupported() {
 
 ### Functions: Menus
 
+function dialog_wrapper() {
+  local choice status
+  set +e
+  choice=$(dialog "$@" 2>&1 1>&3)
+  status=$?
+  set -e
+  if [ ${status} -gt 0 ]; then
+      echo "$(($status+10000))"
+      return 0
+  fi
+  echo "${choice}"
+  return ${status}
+}
+
 function showMenuMain() {
-  local result=$(dialog --title "$title" \
+  dialog_wrapper --title "$title" \
     --cancel-label "Exit" \
     --menu "Choose an option:" 15 50 6 \
     1 "Install" \
     2 "Detect SDRs" \
     3 "Assign SDRs to decoders" \
     4 "Configure feeds" \
-    5 "Health check" 2>&1 1>&3)
-  echo "$result"
+    5 "Health check"
 }
 
 function showMenuInstall() {
-  local result=$(dialog --title "$title" \
+  dialog_wrapper --title "$title" \
     --cancel-label "Back" \
     --menu "Choose an option:" 15 50 4 \
     1 "Install by compiling" \
     2 "Install with Docker" \
-    3 "Install with packages" \
-    2>&1 1>&3)
-  echo "$result"
+    3 "Install with packages"
 }
 
 function showMenuInstallDockerApps() {
-  local result=$(dialog --title "$title" \
+  dialog_wrapper --title "$title" \
   --ok-label "Install" \
   --cancel-label "Back" \
   --checklist "Select Docker apps to install:" 15 50 8 \
@@ -144,12 +155,11 @@ function showMenuInstallDockerApps() {
   2 "ACARS: acarshub" "on" \
   3 "dumphfdl" "off" \
   4 "dumpvdl2" "on" \
-  5 "vdlm2dec" "off" 2>&1 1>&3)
-  echo "$result"
+  5 "vdlm2dec" "off"
 }
 
 function showMenuInstallDecoders() {
-  local result=$(dialog --title "$title" \
+  dialog_wrapper --title "$title" \
   --ok-label "Install" \
   --cancel-label "Back" \
   --checklist "Select decoders to install:" 15 50 8 \
@@ -157,18 +167,16 @@ function showMenuInstallDecoders() {
   2 "ADSB: readsb" "off" \
   3 "HFDL: dumphfdl" "off" \
   4 "VDL: dumpvdl2" "on" \
-  5 "VDL: vdlm2dec" "off" 2>&1 1>&3)
-  echo "$result"
+  5 "VDL: vdlm2dec" "off"
 }
 
 function showMenuConfigureFeeds() {
-  local result=$(dialog --title "$title" \
+  dialog_wrapper --title "$title" \
     --cancel-label "Back" \
     --menu "Choose an option:" 10 50 3 \
     1 "Configure with Docker" \
     2 "Configure with packages" \
-    3 "Configure by compiling" 2>&1 1>&3)
-  echo "$result"
+    3 "Configure by compiling"
 }
 
 
@@ -186,21 +194,28 @@ initializePaths
 installPlatformDependencies
 checkoutInstaller
 
-while [ $? -ne 1 ]
-do
+while :; do
   result=$(showMenuMain)
-  case $result in
+  echo "main menu result is ${result}" >&4
+  case "${result}" in
+    10001)
+      break
+      ;;
+
     1)
       result=$(showMenuInstall)
 
       if [ "$result" = "1" ]; then
         selections=$(showMenuInstallDecoders)
-        echo "Installing decoders from source: $selections" >&4
+	[ "${selections}" == "10001" ] && continue
 
         if [ "$selections" == "" ]; then
+	  echo "No decoders selected to install" >&4
+	  dialog --title "Warning" --msgbox "No decoders selected to install" 6 50
           continue
         fi
 
+        echo "Installing decoders from source: $selections" >&4
         for selection in $selections
         do
           case $selection in
