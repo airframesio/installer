@@ -278,7 +278,6 @@ while :; do
       sdrs=$(detectSDRs)
       echo "Detected SDRs: ${sdrs}" >&4
       dialog --title "Detected SDRs" --msgbox "$sdrs" 10 50
-      sleep 5
       ;;
 
   esac
