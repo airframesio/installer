@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Airframes Installer - Decoder installer - readsb by wiedehopf (VDL)
+# Airframes Installer - Decoder installer - readsb by wiedehopf (Mode S)
 # https://github.com/airframesio/scripts/installer/decoders/compile/install/readsb.sh
 #
 

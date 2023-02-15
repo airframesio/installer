@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Airframes Installer - Decoder installer - dumpvdl2 by szpajder (VDL)
+# Airframes Installer - Decoder installer - dumpvdl2 by szpajder (VDL2)
 # https://github.com/airframesio/installer/decoders/compile/install/dumpvdl2.sh
 #
 
