@@ -11,7 +11,6 @@ source $(dirname -- "$0")/../../../utils/common.sh
 
 prepare() {
   mkdir -p /tmp/airframes-installer/src
-  mkdir -p /tmp/airframes-installer/logs
   rm -rf /tmp/airframes-installer/src/acarsdec
   rm -rf /tmp/airframes-installer/src/libacars
 }
