@@ -8,6 +8,8 @@
 SDR_DEVICES=(
   "0x0bda:0x2832" # RealTek 2832
   "0x0bda:0x2838" # RTL-SDR.com RTL2838U
+  "0x1df7:0x2500" # SDRplay RSP1
+  "0x1df7:0x3030" # SDRplay RSPdx
 )
 
 function detectSDRs() {
